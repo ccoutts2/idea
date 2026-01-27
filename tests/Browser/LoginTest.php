@@ -25,13 +25,12 @@ test('it logs out a user', function (): void {
 });
 
 test('it requires a valid email', function (): void {
-    $user = User::factory()->create(['email' => 'j@mail.com', 'password' => 'password']);
 
     visit('/login')
         ->fill('email', 'j@mail')
-        ->fill('password', $user->password)
+        ->fill('password', 'password')
         ->click('@login-button')
-        ->assertPathIs('/');
+        ->assertPathIs('/login');
 
-    $this->assertAuthenticated();
+    $this->assertGuest();
 });

@@ -1,8 +1,5 @@
 <x-layout>
-
     <div>
-
-
         <header class="py-8 md:py-12">
             <h1 class="text-3xl font-bold">Ideas</h1>
             <p class="text-muted-foreground text-sm mt-2">Capture your thoughts. Make a plan.</p>
@@ -46,8 +43,39 @@
             </ul>
         </div>
 
-        <x-modal name="create-idea" title="New Idea">
-            Hello
-        </x-modal>
+    </div>
+
+    <x-modal name="create-idea" title="New Idea">
+        <form x-data="{status: 'pending'}" method="POST" action="{{ route('idea.store') }}">
+            @csrf
+            <div class="flex flex-col gap-6">
+                <x-form.field label="Title" name="title" placeholder="Enter an idea for your title" autofocus />
+
+                <div class="space-y-2">
+                    <label for="status" class="label">Status</label>
+                    <div class="flex gap-x-3">
+                        @foreach (App\IdeaStatus::cases() as $status )
+                        <button type="button" @click="status = @js($status->value)" class="btn flex-1 h-10 my-2" :class="{'btn-outlined': status !== @js($status->value)}">{{ $status->label() }}</button>
+
+                        @endforeach
+
+                        <x-form.error name="status" />
+                        <input type="hidden" name="status" :value="status" class="input" />
+                    </div>
+                </div>
+
+                <x-form.field label=" Description" name="description" type="textarea" placeholder="Describe your idea..." />
+            </div>
+
+            <div class="flex justify-end gap-x-5">
+                <button @click="$dispatch('close-modal')" type="button">Cancel</button>
+                <button type="submit" class="btn">Create</button>
+            </div>
+        </form>
+    </x-modal>
+
+    </div>
+
+    </div>
     </div>
 </x-layout>

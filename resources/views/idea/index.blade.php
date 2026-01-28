@@ -46,7 +46,11 @@
     </div>
 
     <x-modal name="create-idea" title="New Idea">
-        <form x-data="{status: 'pending'}" method="POST" action="{{ route('idea.store') }}">
+        <form x-data="{
+        status: 'pending',
+        newLink: '',
+        links: [],
+        }" method="POST" action="{{ route('idea.store') }}">
             @csrf
             <div class="flex flex-col gap-6">
                 <x-form.field label="Title" name="title" placeholder="Enter an idea for your title" autofocus />
@@ -66,10 +70,37 @@
                 <x-form.field label=" Description" name="description" type="textarea" placeholder="Describe your idea..." />
             </div>
 
+            <div>
+                <fieldset class="space-y-3 py-2">
+                    <legend class="label">Link</legend>
+
+                    <template x-for="(link, index) in links" :key="link">
+                        <div class="flex gap-x-2 items-center">
+                            <input name="links[]" :value="link" x-model="link" class="input" />
+                            <button type="button" @click="links.splice(index, 1)" class="form-muted-icon" aria-label="Delete a link.">
+                                -
+                            </button>
+                        </div>
+                    </template>
+
+                    <div class="flex gap-x-2 items-center">
+                        <input x-model="newLink" type="url" id="new-link" data-test="new-link" placeholder="https://www.example.com" class="input flex-1" spellcheck="false" autocomplete="url" />
+
+                        <button type="button" data-test="submit-new-link-button" @click="links.push(newLink.trim()); newLink='';" :disabled="newLink.trim().length === 0;" aria-label="Add a new link.">
+                            +
+                        </button>
+                    </div>
+
+                </fieldset>
+
+            </div>
+
             <div class="flex justify-end gap-x-5">
                 <button @click="$dispatch('close-modal')" type="button">Cancel</button>
                 <button type="submit" class="btn">Create</button>
             </div>
+
+
         </form>
     </x-modal>
 

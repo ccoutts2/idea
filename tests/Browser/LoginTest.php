@@ -9,7 +9,7 @@ test('it logs in a user', function (): void {
         ->fill('email', $user->email)
         ->fill('password', 'password')
         ->click('@login-button')
-        ->assertPathIs('/');
+        ->assertPathIs('/ideas');
 
     $this->assertAuthenticated();
 });

@@ -12,5 +12,4 @@
             {{ $slot }}
         </div>
     </x-card>
-
 </div>
